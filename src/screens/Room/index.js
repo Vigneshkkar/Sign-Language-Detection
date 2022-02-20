@@ -6,6 +6,7 @@ import * as tf from '@tensorflow/tfjs';
 // import * as tflite from '@tensorflow/tfjs-tflite';
 import { useEffect, useState } from 'react';
 import RoomScreen from './RoomScreen';
+// import { io } from 'socket.io-client';
 
 // tflite.setWasmPath('http://127.0.0.1:5000/api/v1/dataset/');
 // tflite.setWasmPath(
@@ -14,6 +15,15 @@ import RoomScreen from './RoomScreen';
 
 const Room = () => {
   const [model, setmodel] = useState(null);
+
+  // useEffect(() => {
+  //   if (socket) socket.connect();
+
+  //   return () => {
+  //     if (socket) socket.close();
+  //   };
+  // }, [socket]);
+
   useEffect(async () => {
     // const tfliteModel = await tflite.loadTFLiteModel(
     //   'http://127.0.0.1:5000/api/v1/dataset/static/image_model.tflite'

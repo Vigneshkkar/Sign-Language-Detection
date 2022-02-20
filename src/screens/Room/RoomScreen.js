@@ -173,7 +173,7 @@ const RoomScreen = ({ model }) => {
         <span ref={wordCheck}></span>
       </div>
       <div>
-        <Webcam ref={webcamRef} className={styles.webcam} />
+        <Webcam ref={webcamRef} className={styles.webcam} audio={false} />
         <canvas ref={canvasRef} className={styles.webcam}></canvas>
       </div>
     </div>

@@ -26,6 +26,8 @@
     "react-scripts": "5.0.0",
     "react-webcam": "^6.0.1",
     "sass": "^1.49.7",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1",
     "web-vitals": "^0.2.4",
     "workbox-background-sync": "^5.1.4",
     "workbox-broadcast-update": "^5.1.4",
