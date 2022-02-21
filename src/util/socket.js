@@ -18,7 +18,7 @@ const SocketHelper = ({ room_id, display_name }) => {
       console.log('socket connected....', newSocket.id);
       newSocket.emit('join-room', {
         room_id: room_id || 'test_room',
-        display_name: newSocket.id,
+        display_name: display_name, //newSocket.id,
       });
     });
 

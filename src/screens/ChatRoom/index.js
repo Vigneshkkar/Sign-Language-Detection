@@ -4,16 +4,28 @@ import { io } from 'socket.io-client';
 import SocketHelper from '../../util/socket';
 import WebRTCHelper from '../../util/WebRtcHelper';
 import UiHelper from '../../util/UiHelper';
+import { useNavigate, useParams } from 'react-router-dom';
+import Button from '@mui/material/Button';
 
 const ChatRoom = () => {
+  let params = useParams();
+  let navigate = useNavigate();
   // const [socket, setSocket] = useState(null);
   const [connected, setConnected] = useState(false);
 
-  const [previousPeers, updatePeers, setsocket, setsteams, setmyId] =
-    WebRTCHelper();
+  const [
+    previousPeers,
+    updatePeers,
+    setsocket,
+    setsteams,
+    setmyId,
+    a,
+    b,
+    clearAll,
+  ] = WebRTCHelper();
   const [socket, peerIds, myId, videoGrid] = SocketHelper({
-    room_id: 'test_room',
-    display_name: 'Vicky',
+    room_id: params.RoomId,
+    display_name: params.userName,
   });
 
   useEffect(() => {
@@ -23,6 +35,12 @@ const ChatRoom = () => {
   }, [peerIds]);
   useEffect(() => {
     if (videoGrid.current && connected) socket.connect();
+    return () => {
+      if (socket) {
+        socket.close();
+        clearAll();
+      }
+    };
   }, [videoGrid, connected]);
 
   useEffect(() => {
@@ -62,14 +80,20 @@ const ChatRoom = () => {
     }
 
     return () => {
-      if (socket) socket.close();
+      // if (socket) socket.close();
     };
   }, [socket]);
 
   return (
     <>
       {/* <div>working</div> */}
-      <div ref={videoGrid} class='video-grid'></div>
+      <div className='appBar'>
+        <div className='titile'>Room ID: {params.RoomId}</div>
+        <Button onClick={() => navigate('/')} className='button' variant='text'>
+          Exit Room
+        </Button>
+      </div>
+      <div ref={videoGrid} className='video-grid'></div>
       {/* <ChatScreen />; */}
     </>
   );

@@ -57,6 +57,9 @@ const WebRTCHelper = () => {
             break;
         }
       });
+    return () => {
+      console.log(peerConnections);
+    };
   }, [socketref]);
 
   const handleNewICECandidateMsg = (msg) => {
@@ -263,6 +266,21 @@ const WebRTCHelper = () => {
     }
   };
 
+  const clearAll = () => {
+    for (let peer_id in peerConnections) {
+      peerConnections[peer_id].onicecandidate = null;
+      peerConnections[peer_id].ontrack = null;
+      peerConnections[peer_id].onnegotiationneeded = null;
+
+      delete peerConnections[peer_id]; // remove user from user list
+    }
+    peerConnections = {};
+    steams.getTracks().forEach(function (track) {
+      track.stop();
+    });
+    steams = null;
+  };
+
   return [
     peerConnections,
     updatePeers,
@@ -271,6 +289,7 @@ const WebRTCHelper = () => {
     setmyId,
     closeConnection,
     invite,
+    clearAll,
   ];
 };
 
