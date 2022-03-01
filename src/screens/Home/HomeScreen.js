@@ -3,11 +3,13 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { TextField } from '@mui/material';
+import { Stack, TextField } from '@mui/material';
 import styles from './index.module.scss';
 import { useState } from 'react';
 import JoinRoom from '../../components/JoinRoom';
 import { useNavigate } from 'react-router-dom';
+import WordDetails from '../../components/WordDetails';
+import Privacy from '../../components/Privacy';
 
 const HomeScreen = () => {
   const [open, setOpen] = useState(false);
@@ -32,11 +34,26 @@ const HomeScreen = () => {
           variant='text'>
           Join Room
         </Button>
-        <Button className={styles.button} variant='text'>
+        <Button
+          onClick={() => navigate('/record')}
+          className={styles.button}
+          variant='text'>
           Record Dataset
         </Button>
       </div>
-      <div className={styles.container}></div>
+      {/* <div className={styles.container}> */}
+      <Stack margin={2} spacing={2}>
+        <Typography
+          color={'#e84855'}
+          fontWeight='bold'
+          align='center'
+          variant='h2'>
+          Sign Language Detection
+        </Typography>
+        <Privacy />
+        <WordDetails />
+      </Stack>
+      {/* </div> */}
     </>
   );
 };

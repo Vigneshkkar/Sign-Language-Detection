@@ -1,18 +1,14 @@
 import { useEffect, useState } from 'react';
 import ChatScreen from './ChatScreen';
-import { io } from 'socket.io-client';
 import SocketHelper from '../../util/socket';
 import WebRTCHelper from '../../util/WebRtcHelper';
-import UiHelper from '../../util/UiHelper';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
 
 const ChatRoom = () => {
   let params = useParams();
   let navigate = useNavigate();
-  // const [socket, setSocket] = useState(null);
   const [connected, setConnected] = useState(false);
-
   const [
     previousPeers,
     updatePeers,
@@ -62,14 +58,8 @@ const ChatRoom = () => {
           }, // ...and we want a video track
         })
         .then((stream) => {
-          //   myVideo.srcObject = stream;
-          // camera_allowed = true;
-          //   setAudioMuteState(audioMuted);
-          //   setVideoMuteState(videoMuted);
-          //start the socketio connection
           setsteams(stream);
           if (!connected) {
-            // socket.connect();
             setConnected(true);
           }
         })
@@ -94,7 +84,7 @@ const ChatRoom = () => {
         </Button>
       </div>
       <div ref={videoGrid} className='video-grid'></div>
-      {/* <ChatScreen />; */}
+      <ChatScreen />;
     </>
   );
 };

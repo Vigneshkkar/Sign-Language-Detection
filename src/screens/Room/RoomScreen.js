@@ -157,7 +157,8 @@ const RoomScreen = ({ model }) => {
     ) {
       camera = new cam.Camera(webcamRef.current.video, {
         onFrame: async () => {
-          await holistic.send({ image: webcamRef.current.video });
+          if (webcamRef.current)
+            await holistic.send({ image: webcamRef.current.video });
         },
         width: 640,
         height: 480,
@@ -165,6 +166,15 @@ const RoomScreen = ({ model }) => {
       camera.start();
     }
     setholi(holistic);
+
+    return () => {
+      const feed = webcamRef.current.video;
+
+      // reset feed source
+      feed.pause();
+      feed.srcObject.getTracks().forEach((a) => a.stop());
+      feed.srcObject = null;
+    };
   }, []);
 
   return (

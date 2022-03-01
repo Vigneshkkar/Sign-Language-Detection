@@ -20,7 +20,7 @@ canvas {
   align-items: center;
   justify-content: center;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 3.2rem);
 }
 .buttonCont {
   display: flex;

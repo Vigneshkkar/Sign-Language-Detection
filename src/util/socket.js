@@ -14,6 +14,9 @@ const SocketHelper = ({ room_id, display_name }) => {
 
   useEffect(() => {
     const newSocket = io('ws://127.0.0.1:5000', { autoConnect: false });
+    // const newSocket = io('https://6454-142-115-62-84.ngrok.io', {
+    //   autoConnect: false,
+    // });
     newSocket.on('connect', () => {
       console.log('socket connected....', newSocket.id);
       newSocket.emit('join-room', {

@@ -9,10 +9,13 @@ import Webcam from 'react-webcam';
 import styles from './index.module.scss';
 import LoadingButton from '@mui/lab/LoadingButton';
 import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
-import { TextField } from '@mui/material';
+import { LinearProgress, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import ProgressWithLabel from '../../components/ProgressWithLabel';
+import { useNavigate } from 'react-router-dom';
+import { Box } from '@mui/system';
 
 const FRAMES_TO_COLLECT = 40;
 const VIDEOS_TO_COLLECT = 10;
@@ -206,61 +209,77 @@ const RecordVideoScreen = ({ collectionCompleted, isSaving, isError }) => {
 
     setOpen(false);
   };
+  let navigate = useNavigate();
   return (
-    <div className={styles.container}>
-      <div>
-        <Webcam ref={webcamRef} className={styles.webcam} />
-        <canvas ref={canvasRef} className={styles.webcam}></canvas>
+    <>
+      <div className='appBar'>
+        <div className='titile'>Record Words For Dataset</div>
+        <Button onClick={() => navigate('/')} className='button' variant='text'>
+          Home
+        </Button>
       </div>
-      {/* {frames + ':' + videos + ':' + paused + ':' + word} */}
-      <div className={styles.details}>
-        {paused ? (
-          <span className={styles.paused}>
-            Paused for resetting hand Position
+      <div className={styles.container}>
+        <div>
+          <Webcam ref={webcamRef} className={styles.webcam} />
+          <canvas ref={canvasRef} className={styles.webcam}></canvas>
+        </div>
+        {/* {frames + ':' + videos + ':' + paused + ':' + word} */}
+        <div className={styles.details}>
+          {paused ? (
+            <span className={styles.paused}>
+              Paused for resetting hand Position
+            </span>
+          ) : null}
+          <span className={styles.video}>
+            Collecting Data for Video #{videos}
+          </span>
+          <span className={styles.frame}>Capturing Frame {frames}</span>
+        </div>
+        <div className={styles.buttonCont}>
+          <TextField
+            onInput={(val) => setword(val.target.value)}
+            label='Word'
+            variant='outlined'
+            disabled={isSaving}
+          />
+          <LoadingButton
+            disabled={isSaving}
+            loading={Loading || startCollection}
+            loadingPosition='start'
+            startIcon={<PlayCircleFilledWhiteIcon />}
+            onClick={() => {
+              if (!word) setOpen(true);
+              else setstartCollection(true);
+            }}
+            variant='outlined'>
+            {startCollection ? 'Collecting Frames' : 'Start'}
+          </LoadingButton>
+        </div>
+        {startCollection ? (
+          <Box sx={{ width: '50%' }}>
+            <ProgressWithLabel value={videos * 10} />
+          </Box>
+        ) : (
+          <></>
+        )}
+        {isSaving ? (
+          <span className={styles.saving}>
+            Saving the data for the word {word} please wait...
           </span>
         ) : null}
-        <span className={styles.video}>
-          Collecting Data for Video #{videos}
-        </span>
-        <span className={styles.frame}>Capturing Frame {frames}</span>
-      </div>
-      <div className={styles.buttonCont}>
-        <TextField
-          onInput={(val) => setword(val.target.value)}
-          label='Word'
-          variant='outlined'
-          disabled={isSaving}
-        />
-        <LoadingButton
-          disabled={isSaving}
-          loading={Loading || startCollection}
-          loadingPosition='start'
-          startIcon={<PlayCircleFilledWhiteIcon />}
-          onClick={() => {
-            if (!word) setOpen(true);
-            else setstartCollection(true);
-          }}
-          variant='outlined'>
-          {startCollection ? 'Collecting Frames' : 'Start'}
-        </LoadingButton>
-      </div>
-      {isSaving ? (
-        <span className={styles.saving}>
-          Saving the data for the word {word} please wait...
-        </span>
-      ) : null}
-      {isError ? (
-        <span className={styles.error}>
-          Error while saving data for the word {word} please try again...
-        </span>
-      ) : null}
+        {isError ? (
+          <span className={styles.error}>
+            Error while saving data for the word {word} please try again...
+          </span>
+        ) : null}
 
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
-          Cannot start collecting data without entering word.
-        </Alert>
-      </Snackbar>
-    </div>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
+            Cannot start collecting data without entering word.
+          </Alert>
+        </Snackbar>
+      </div>
+    </>
   );
 };
 
