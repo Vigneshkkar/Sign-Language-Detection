@@ -5,24 +5,24 @@
   flex-direction: column;
 }
 
-.appBar {
-  width: 100%;
-  background-color: #5a31fd;
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  height: 3rem;
-  box-shadow: -1px 12px 12px 3px rgb(0 0 0 / 17%);
+// .appBar {
+//   width: 100%;
+//   background-color: #5a31fd;
+//   display: flex;
+//   justify-content: end;
+//   align-items: center;
+//   height: 3rem;
+//   box-shadow: -1px 12px 12px 3px rgb(0 0 0 / 17%);
 
-  & > .button {
-    color: white;
-    width: 220px;
-  }
-  & > .titile {
-    color: white;
-    width: 100%;
-    padding-left: 20px;
-    font-size: 23px;
-    font-weight: bold;
-  }
-}
+//   & > .button {
+//     color: white;
+//     width: 220px;
+//   }
+//   & > .titile {
+//     color: white;
+//     width: 100%;
+//     padding-left: 20px;
+//     font-size: 23px;
+//     font-weight: bold;
+//   }
+// }

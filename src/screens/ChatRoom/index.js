@@ -4,10 +4,23 @@ import SocketHelper from '../../util/socket';
 import WebRTCHelper from '../../util/WebRtcHelper';
 import { useNavigate, useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import styles from './index.module.scss';
 
+import VideoControls from '../../components/VideoControls';
+import Webcam from 'react-webcam';
+var steamRef = null;
 const ChatRoom = () => {
   let params = useParams();
   let navigate = useNavigate();
+  const [muted, setmuted] = useState(true);
+  const [videoOn, setvideoOn] = useState(true);
+
+  useEffect(() => {
+    if (steamRef) {
+      steamRef.getAudioTracks()[0].enabled = !muted;
+      steamRef.getVideoTracks()[0].enabled = videoOn;
+    }
+  }, [muted, videoOn]);
   const [connected, setConnected] = useState(false);
   const [
     previousPeers,
@@ -58,6 +71,8 @@ const ChatRoom = () => {
           }, // ...and we want a video track
         })
         .then((stream) => {
+          steamRef = stream;
+          steamRef.getAudioTracks()[0].enabled = false;
           setsteams(stream);
           if (!connected) {
             setConnected(true);
@@ -84,7 +99,21 @@ const ChatRoom = () => {
         </Button>
       </div>
       <div ref={videoGrid} className='video-grid'></div>
-      <ChatScreen />;
+      <VideoControls
+        muted={muted}
+        videoOn={videoOn}
+        setmuted={setmuted}
+        setvideoOn={setvideoOn}
+      />
+      {params.UserType == 'true' ? (
+        <ChatScreen enblePrediction={params.UserType} />
+      ) : (
+        <div className={styles.container}>
+          {/* <div> */}
+          <Webcam className={styles.webcam} audio={false} />
+          {/* </div> */}
+        </div>
+      )}
     </>
   );
 };

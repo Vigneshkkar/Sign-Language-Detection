@@ -6,7 +6,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-import { TextField } from '@mui/material';
+import {
+  FormControlLabel,
+  FormGroup,
+  Switch,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { forwardRef, useState } from 'react';
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -14,6 +20,11 @@ const Transition = forwardRef(function Transition(props, ref) {
 });
 
 const JoinRoom = ({ open, onClose }) => {
+  const [checked, setChecked] = useState(false);
+  const handleChange = (event) => {
+    setChecked(event.target.checked);
+  };
+
   const [name, setname] = useState(null);
   const [id, setid] = useState(null);
   return (
@@ -43,10 +54,18 @@ const JoinRoom = ({ open, onClose }) => {
             variant='filled'
             label='User Name'
           />
+          <br />
+          {/* <Typography variant='body1'>Are you a Sign User ?</Typography> */}
+          <FormGroup>
+            <FormControlLabel
+              control={<Switch checked={checked} onChange={handleChange} />}
+              label='Are you a Sign User ?'
+            />
+          </FormGroup>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => onClose()}>close</Button>
-          <Button onClick={() => onClose(name, id)}>join</Button>
+          <Button onClick={() => onClose(name, id, checked)}>join</Button>
         </DialogActions>
       </Dialog>
     </div>

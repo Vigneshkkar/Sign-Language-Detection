@@ -1,3 +1,5 @@
+@import 'toastify-js/src/toastify.css';
+
 .video-grid {
   display: flex;
   justify-content: space-around;
@@ -11,7 +13,7 @@
 .display-name {
   width: 100%;
   text-align: center;
-  font-size: 20px;
+  font-size: 45px;
   color: #e46700;
 }
 .vid-wrapper {
@@ -29,6 +31,8 @@
   align-items: center;
   height: 3rem;
   box-shadow: -1px 12px 12px 3px rgb(0 0 0 / 17%);
+  position: fixed;
+  top: 0px;
 
   & > .button {
     color: white;

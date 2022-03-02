@@ -1,0 +1,17 @@
+.container {
+  padding: 20px;
+  display: flex;
+  position: fixed;
+  background: #ffffff26;
+  width: 200px;
+  backdrop-filter: blur(11px);
+  border-radius: 100px;
+  bottom: 10px;
+  right: calc(100px);
+  justify-content: space-around;
+  z-index: 9999;
+  img {
+    width: 40px;
+    height: 40px;
+  }
+}

@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router-dom';
 import WordDetails from '../../components/WordDetails';
 import Privacy from '../../components/Privacy';
 
+import Logo from '../../assets/sign-language.png';
+
 const HomeScreen = () => {
   const [open, setOpen] = useState(false);
   let navigate = useNavigate();
@@ -18,31 +20,29 @@ const HomeScreen = () => {
     <>
       <JoinRoom
         open={open}
-        onClose={(name, id) => {
+        onClose={(name, id, signUser) => {
           console.log(name, id);
           setOpen(false);
           if (name && id) {
-            navigate(`/chat/${id}/${name}`);
+            navigate(`/chat/${signUser}/${id}/${name}`);
           }
         }}
       />
-      <div className={styles.appBar}>
-        <div className={styles.titile}>Loud Signers</div>
-        <Button
-          onClick={() => setOpen(true)}
-          className={styles.button}
-          variant='text'>
+      <div className='appBar'>
+        <div className='titile'>Loud Signers</div>
+        <Button onClick={() => setOpen(true)} className='button' variant='text'>
           Join Room
         </Button>
         <Button
           onClick={() => navigate('/record')}
-          className={styles.button}
+          className='button'
           variant='text'>
           Record Dataset
         </Button>
       </div>
       {/* <div className={styles.container}> */}
-      <Stack margin={2} spacing={2}>
+      <Stack alignItems={'center'} margin={2} spacing={2}>
+        <img width={100} src={Logo} />
         <Typography
           color={'#e84855'}
           fontWeight='bold'

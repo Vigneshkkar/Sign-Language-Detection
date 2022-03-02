@@ -1,19 +1,14 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Loud Signers",
+  "name": "AI App for Sign Language Recognition",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "sign-language.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "logo512.png",
+      "src": "sign-language.png",
       "type": "image/png",
       "sizes": "512x512"
     }

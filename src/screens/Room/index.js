@@ -30,8 +30,12 @@ const Room = () => {
     // );
     // // tfliteModel.then((data) => console.log(data));
     // console.log(tfliteModel);
+    let baseUrl = 'http://127.0.0.1:5000/api/v1/';
+    if (process.env.REACT_APP_STAGE === 'production') {
+      baseUrl = `${window.location.protocol}//${window.location.hostname}/api/v1/`;
+    }
     const model = await tf.loadLayersModel(
-      'http://127.0.0.1:5000/api/v1/dataset/static/jsModel/model.json'
+      `${baseUrl}dataset/static/jsModel/model.json`
     );
     setmodel(model);
     // model.predict([]);

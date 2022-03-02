@@ -40,7 +40,7 @@ function App() {
     <ThemeProvider theme={themeOptions}>
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='chat/:RoomId/:userName' element={<ChatRoom />} />
+        <Route path='chat/:UserType/:RoomId/:userName' element={<ChatRoom />} />
         <Route path='record' element={<RecordVideo />} />
       </Routes>
     </ThemeProvider>

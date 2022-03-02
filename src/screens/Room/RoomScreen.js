@@ -7,6 +7,7 @@ import Webcam from 'react-webcam';
 import styles from './index.module.scss';
 import { getKeyPoints } from '../../util/Helper';
 import * as tf from '@tensorflow/tfjs';
+import { messageService } from '../../util/MessageService';
 
 const FRAMES_TO_COLLECT = 40;
 const VIDEOS_TO_COLLECT = 10;
@@ -23,87 +24,16 @@ const RoomScreen = ({ model }) => {
   let fullFrames = [];
   const [Loading, setLoading] = useState(true);
   const [holi, setholi] = useState(null);
-  const [sentence, setsentence] = useState([]);
-  const wordCheck = useRef(null);
-  // setsentence(window.wordCheck);
-  useEffect(() => {
-    console.log(window.wordCheck);
-    // setsentence([...sentence, wordCheck.current]);
-    setsentence(window.wordCheck);
-    return () => {};
-  }, [window.wordCheck]);
+  // const [sentence, setsentence] = useState([]);
+  // const wordCheck = useRef(null);
+
+  // useEffect(() => {
+  //   console.log(window.wordCheck);
+  //   setsentence(window.wordCheck);
+  //   return () => {};
+  // }, [window.wordCheck]);
 
   function onResults(results) {
-    // finalResult.push(results);
-
-    const videoWidth = webcamRef.current.video.videoWidth;
-    const videoHeight = webcamRef.current.video.videoHeight;
-
-    // Set canvas width
-    canvasRef.current.width = videoWidth;
-    canvasRef.current.height = videoHeight;
-
-    const canvasElement = canvasRef.current;
-    const canvasCtx = canvasElement.getContext('2d');
-    canvasCtx.save();
-    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    // console.log(results);
-    canvasCtx.drawImage(
-      results.image,
-      0,
-      0,
-      canvasElement.width,
-      canvasElement.height
-    );
-    drawConnectors(
-      canvasCtx,
-      results.poseLandmarks,
-      HolisticHelper.POSE_CONNECTIONS,
-      {
-        color: '#00FF00',
-        lineWidth: 4,
-      }
-    );
-    drawLandmarks(canvasCtx, results.poseLandmarks, {
-      color: '#FF0000',
-      lineWidth: 2,
-    });
-    drawConnectors(
-      canvasCtx,
-      results.faceLandmarks,
-      HolisticHelper.FACEMESH_TESSELATION,
-      {
-        color: '#C0C0C070',
-        lineWidth: 1,
-      }
-    );
-    drawConnectors(
-      canvasCtx,
-      results.leftHandLandmarks,
-      HolisticHelper.HAND_CONNECTIONS,
-      {
-        color: '#CC0000',
-        lineWidth: 5,
-      }
-    );
-    drawLandmarks(canvasCtx, results.leftHandLandmarks, {
-      color: '#00FF00',
-      lineWidth: 2,
-    });
-    drawConnectors(
-      canvasCtx,
-      results.rightHandLandmarks,
-      HolisticHelper.HAND_CONNECTIONS,
-      {
-        color: '#00CC00',
-        lineWidth: 5,
-      }
-    );
-    drawLandmarks(canvasCtx, results.rightHandLandmarks, {
-      color: '#FF0000',
-      lineWidth: 2,
-    });
-    canvasCtx.restore();
     return results;
   }
 
@@ -144,7 +74,8 @@ const RoomScreen = ({ model }) => {
         ) {
           sentence.push(word);
           // test = sentence;
-          wordCheck.current.innerHTML = sentence.join(' ');
+          // wordCheck.current.innerHTML = sentence.join(' ');
+          messageService.sendMessage(word);
         }
       } else {
         fullFrames.push(temp);
@@ -179,12 +110,12 @@ const RoomScreen = ({ model }) => {
 
   return (
     <div className={styles.container}>
-      <div>
+      {/* <div>
         <span ref={wordCheck}></span>
-      </div>
+      </div> */}
       <div>
         <Webcam ref={webcamRef} className={styles.webcam} audio={false} />
-        <canvas ref={canvasRef} className={styles.webcam}></canvas>
+        {/* <canvas ref={canvasRef} className={styles.webcam}></canvas> */}
       </div>
     </div>
   );

@@ -3,6 +3,19 @@ import { io } from 'socket.io-client';
 import UiHelper from './UiHelper';
 import WebRTCHelper from './WebRtcHelper';
 
+import Toastify from 'toastify-js';
+import { messageService } from './MessageService';
+
+var msg = new SpeechSynthesisUtterance();
+var voices = window.speechSynthesis.getVoices();
+msg.voice = voices[10];
+msg.volume = 1; // From 0 to 1
+msg.rate = 1; // From 0.1 to 10
+msg.pitch = 2; // From 0 to 2
+msg.lang = 'en';
+// msg.text = "Como estas Joel";
+// speechSynthesis.speak(msg);
+
 const SocketHelper = ({ room_id, display_name }) => {
   const [socket, setsocket] = useState(null);
   const [peerIds, setpeerIds] = useState([]);
@@ -12,8 +25,21 @@ const SocketHelper = ({ room_id, display_name }) => {
 
   const [videoGrid, addVideoElement, dum, removeVideoElement] = UiHelper();
 
+  const [subscription, setsubscription] = useState(null);
+
   useEffect(() => {
-    const newSocket = io('ws://127.0.0.1:5000', { autoConnect: false });
+    return () => {
+      if (subscription) subscription.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    const newSocket = io(
+      process.env.REACT_APP_STAGE === 'production'
+        ? `wss://vigneshkkar.in:3001`
+        : 'ws://127.0.0.1:5000',
+      { autoConnect: false }
+    );
     // const newSocket = io('https://6454-142-115-62-84.ngrok.io', {
     //   autoConnect: false,
     // });
@@ -24,6 +50,17 @@ const SocketHelper = ({ room_id, display_name }) => {
         display_name: display_name, //newSocket.id,
       });
     });
+    const sub = messageService.getMessage().subscribe((message) => {
+      console.log(newSocket);
+      newSocket.emit('broadcast-predicted', {
+        room_id: room_id || 'test_room',
+        sender_id: myId,
+        type: 'predicted_msg',
+        display_name: display_name,
+        text: message.text,
+      });
+    });
+    setsubscription(sub);
 
     newSocket.on('user-connect', (data) => {
       console.log('user-connect ', data);
@@ -32,6 +69,26 @@ const SocketHelper = ({ room_id, display_name }) => {
         ...peerIds,
         { PeerId: data['sid'], displayName: data['name'] },
       ]);
+    });
+
+    newSocket.on('get-predicted', (data) => {
+      console.log('get-predicted', data);
+      Toastify({
+        text: `${data.display_name} : ${data.text}`,
+        duration: 4000,
+        newWindow: true,
+        close: false,
+        gravity: 'bottom', // `top` or `bottom`
+        position: 'left', // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: 'linear-gradient(to right, #5931fc, #e84855)',
+          borderRadius: '10px',
+        },
+        onClick: function () {}, // Callback after click
+      }).showToast();
+      msg.text = data.text;
+      speechSynthesis.speak(msg);
     });
 
     newSocket.on('user-disconnect', (data) => {
@@ -54,6 +111,8 @@ const SocketHelper = ({ room_id, display_name }) => {
           ids = [...ids, { PeerId: peer_id, displayName: display_name }];
           addVideoElement(peer_id, display_name);
         }
+        //for testing
+        // new Array(100).fill(1).map((o, i) => addVideoElement(o, i));
         for (var peer of ids) {
           invite(peer.PeerId);
         }
