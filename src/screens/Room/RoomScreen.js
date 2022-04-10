@@ -53,7 +53,20 @@ const RoomScreen = ({ model }) => {
       minDetectionConfidence: 0.5,
       minTrackingConfidence: 0.5,
     });
-    const labels = ['hi', 'i', 'name'];
+    const labels = [
+      'fine',
+      'help',
+      'hi',
+      'how',
+      'i',
+      'name',
+      'no',
+      'please',
+      'sorry',
+      'thank you',
+      'yes',
+      'you',
+    ];
     const sentence = [];
     holistic.onResults((res) => {
       if (Loading) {
@@ -63,19 +76,21 @@ const RoomScreen = ({ model }) => {
       if (fullFrames.length >= FRAMES_TO_COLLECT) {
         fullFrames.splice(0, 1);
         fullFrames.push(temp);
-        const predicted = model.predict(tf.tensor([fullFrames])).dataSync();
-        const index = predicted.indexOf(Math.max(...predicted));
-        const word = labels[index];
-        // console.log(word);
-        if (
-          sentence.at(-1) != word
-          // &&
-          // !(sentence.length != 0 && word == 'hi')
-        ) {
-          sentence.push(word);
-          // test = sentence;
-          // wordCheck.current.innerHTML = sentence.join(' ');
-          messageService.sendMessage(word);
+        if (!!res.leftHandLandmarks || !!res.rightHandLandmarks) {
+          const predicted = model.predict(tf.tensor([fullFrames])).dataSync();
+          const index = predicted.indexOf(Math.max(...predicted));
+          const word = labels[index];
+          console.log(word);
+          if (
+            sentence.at(-1) != word
+            // &&
+            // !(sentence.length != 0 && word == 'hi')
+          ) {
+            sentence.push(word);
+            // test = sentence;
+            // wordCheck.current.innerHTML = sentence.join(' ');
+            messageService.sendMessage(word);
+          }
         }
       } else {
         fullFrames.push(temp);

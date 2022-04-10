@@ -35,7 +35,7 @@ const Room = () => {
       baseUrl = `${window.location.protocol}//${window.location.hostname}/api/v1/`;
     }
     const model = await tf.loadLayersModel(
-      `${baseUrl}dataset/static/jsModel/model.json`
+      `${baseUrl}dataset/static/newjsModel/model.json`
     );
     setmodel(model);
     // model.predict([]);

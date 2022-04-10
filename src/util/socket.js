@@ -15,8 +15,10 @@ msg.pitch = 2; // From 0 to 2
 msg.lang = 'en';
 // msg.text = "Como estas Joel";
 // speechSynthesis.speak(msg);
+var disp_const = '';
 
 const SocketHelper = ({ room_id, display_name }) => {
+  disp_const = display_name;
   const [socket, setsocket] = useState(null);
   const [peerIds, setpeerIds] = useState([]);
   const [myId, setmyId] = useState(null);
@@ -36,7 +38,7 @@ const SocketHelper = ({ room_id, display_name }) => {
   useEffect(() => {
     const newSocket = io(
       process.env.REACT_APP_STAGE === 'production'
-        ? `wss://vigneshkkar.in:3001`
+        ? `wss://loud-signers.com:3001`
         : 'ws://127.0.0.1:5000',
       { autoConnect: false }
     );
@@ -56,7 +58,7 @@ const SocketHelper = ({ room_id, display_name }) => {
         room_id: room_id || 'test_room',
         sender_id: myId,
         type: 'predicted_msg',
-        display_name: display_name,
+        display_name: disp_const,
         text: message.text,
       });
     });
